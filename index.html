@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Princess Slide</title>
+
+    <!-- Load File CSS -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- ======================= SLIDE 1 ======================= -->
+<div id="slide1" class="slide active">
+    <div class="frame">
+        Hallo Princess Tengilll, lagi capeee yahhhh,<br>
+        coba klik dulu di bawah ini
+    </div>
+
+    <img src="kucing.gif">
+
+    <button onclick="goTo('slide3')">okeee</button>
+    <button onclick="goTo('slide2')">gamau</button>
+</div>
+
+<!-- ======================= SLIDE 2 ======================= -->
+<div id="slide2" class="slide">
+    <div class="frame">
+        mauuu yaaaaa 🥺
+    </div>
+
+    <img src="memohon.gif">
+
+    <button onclick="goTo('slide3')">okedeh mauu</button>
+</div>
+
+<!-- ======================= SLIDE 3 ======================= -->
+<div id="slide3" class="slide">
+    <div class="frame">
+        Princess kan suka boboo,<br>
+        tau ngga minuman apa yang suka bikin ngantukkk???
+    </div>
+
+    <img src="tidur.jpg">
+
+    <button onclick="goTo('slide4')">apatuhhh</button>
+</div>
+
+<!-- ======================= SLIDE 4 ======================= -->
+<div id="slide4" class="slide">
+    <div class="frame">
+        hehehe 😆
+    </div>
+
+    <img src="susu.jpg">
+
+    <button onclick="goTo('slide5')">lanjut dulu yahhh</button>
+</div>
+
+<!-- ======================= SLIDE 5 ======================= -->
+<div id="slide5" class="slide">
+    <div class="frame">
+        Princess kan gemesin bangett tuhh hehe :v,<br>
+        tau ngga raja apa yang lucu bgtttt??
+    </div>
+
+    <img src="baaa.gif">
+
+    <button onclick="goTo('slide6')">raja apa tuhhh</button>
+</div>
+
+<!-- ======================= SLIDE 6 ======================= -->
+<div id="slide6" class="slide">
+    <div class="frame">
+        hihihi 😆
+    </div>
+
+    <img src="firaun.jpg">
+
+    <button onclick="goTo('slide7')">mainan dulu yokkk</button>
+</div>
+
+<!-- ======================= SLIDE 7 — GAME TANGKAP ES KRIM 🍦 ======================= -->
+<div id="slide7" class="slide">
+    <div class="frame">
+        Tangkap es krim nya yaaa Princess 🍦😆💗<br>
+        Waktu cuma 10 detik!
+    </div>
+
+    <div style="font-size:20px; font-weight:bold; color:#ff2e75;">
+        Score: <span id="score">0</span> | Time: <span id="time">10</span>s
+    </div>
+
+    <div id="gameArea"></div>
+
+    <p id="endMessage"></p>
+
+    <button onclick="startGame()">Ulangi Game</button>
+    <button onclick="goTo('slide8')">klik dongg</button>
+</div>
+
+<!-- ======================= SLIDE 8 — MOTIVATION ======================= -->
+<div id="slide8" class="slide">
+    <div class="frame">
+        Aku nggak tahu apa yang samean lalui hari ini,<br><br>
+        tapi aku bangga karena samean berhasil melewatinya.<br><br>
+        Samean hebat, meski hari ini tidak baik.<br><br>
+        Untuk hari esok dan seterusnya,<br>
+        seberat apapun yang samean hadapi,<br>
+        aku yakin pati bisa kokk.
+    </div>
+
+    <img src="tengil.gif">
+
+    <button onclick="goTo('slide1')">kembali ke awal</button>
+</div>
+
+<!-- ======================= SCRIPT ======================= -->
+<script>
+    function goTo(slideId) {
+        document.querySelectorAll(".slide").forEach(s => s.classList.remove("active"));
+        document.getElementById(slideId).classList.add("active");
+
+        if (slideId === "slide7") {
+            startGame();
+        }
+    }
+
+    // ======================= GAME LOGIC =======================
+    let score = 0;
+    let timeLeft = 10;
+    let timerInterval;
+
+    function startGame() {
+        score = 0;
+        timeLeft = 10;
+
+        document.getElementById("score").innerHTML = score;
+        document.getElementById("time").innerHTML = timeLeft;
+        document.getElementById("endMessage").innerHTML = "";
+
+        let gameArea = document.getElementById("gameArea");
+        gameArea.innerHTML = "";
+
+        timerInterval = setInterval(() => {
+            timeLeft--;
+            document.getElementById("time").innerHTML = timeLeft;
+
+            if (timeLeft <= 0) endGame();
+        }, 1000);
+
+        spawnIceCream();
+    }
+
+    function spawnIceCream() {
+        if (timeLeft <= 0) return;
+
+        let gameArea = document.getElementById("gameArea");
+        let ice = document.createElement("img");
+        ice.src = "eskrim.png";
+        ice.style.width = "60px";
+        ice.style.position = "absolute";
+        ice.style.left = Math.random() * 240 + "px";
+        ice.style.top = "-80px";
+        ice.style.cursor = "pointer";
+
+        gameArea.appendChild(ice);
+
+        ice.onclick = function () {
+            score++;
+            document.getElementById("score").innerHTML = score;
+            ice.remove();
+        };
+
+        let fall = setInterval(() => {
+            let top = parseInt(ice.style.top);
+            ice.style.top = top + 6 + "px";
+
+            if (top > 420) {
+                clearInterval(fall);
+                ice.remove();
+            }
+        }, 50);
+
+        setTimeout(spawnIceCream, 700);
+    }
+
+    function endGame() {
+        clearInterval(timerInterval);
+        document.getElementById("endMessage").innerHTML =
+            "Waktu habis! Princess dapet " + score + " es krim 🍦💗";
+    }
+</script>
+
+</body>
+</html>
